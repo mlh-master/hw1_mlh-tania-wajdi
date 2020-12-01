@@ -41,13 +41,14 @@ def nan2num_samp(CTG_features, extra_feature):
     c_ctg = rm_ext_and_nan(CTG_features, extra_feature)
     #del CTG_features[extra_feature]
     CTG_features= CTG_features.apply(pd.to_numeric,errors='coerce')
-    for feature in CTG_features.columns:
-        for i,item in enumerate(CTG_features[feature]):
-            c_cdf[i][feature] = CTG_features[i][feature]   
-    #c_cdf = {key:val for (key,val) in CTG_features.fillna(np.random.choice(c_ctg[key]))}
     #for feature in CTG_features.columns:
-        #for i in range(len(CTG_features[feature])):
-            #c_cdf[feature][i] = CTG_features[feature][i].replace(np.nan,np.random.choice(c_ctg[feature]))
+        #for i,item in enumerate(CTG_features[feature]):
+            #c_cdf[i][feature] = CTG_features[i][feature]   
+    #c_cdf = {key:val for (key,val) in CTG_features.fillna(np.random.choice(c_ctg[key]))}
+    
+    for feature in CTG_features.columns:
+        idx = CTG_features[feature].index(np.isnan())
+            
         #for i in len(CTG_features[feature]):
         #    if np.isnan(i):
         #        CTG_features.replace(i,np.random.choice(c_ctg[feature]))

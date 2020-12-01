@@ -18,13 +18,13 @@ def rm_ext_and_nan(CTG_features, extra_feature):
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
     
-    #CTG_features.drop(columns=extra_feature,inplace=True)
-    
-    #del CTG_features[extra_feature]
-    CTG_features= CTG_features.apply(pd.to_numeric,errors='coerce')
+    # CTG_features.drop(columns=extra_feature,inplace=True)
+    # del CTG_features[extra_feature]
+    CTG_features = CTG_features.apply(pd.to_numeric,errors='coerce')
     c_ctg = {}
     for feature in CTG_features.columns:
         c_ctg[feature] = CTG_features[feature].dropna()
+    del c_ctg[extra_feature]
     # --------------------------------------------------------------------------       
     return c_ctg
 
@@ -39,23 +39,15 @@ def nan2num_samp(CTG_features, extra_feature):
     c_cdf = {}
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
     c_ctg = rm_ext_and_nan(CTG_features, extra_feature)
-    #del CTG_features[extra_feature]
     CTG_features= CTG_features.apply(pd.to_numeric,errors='coerce')
-    #for feature in CTG_features.columns:
-        #for i,item in enumerate(CTG_features[feature]):
-            #c_cdf[i][feature] = CTG_features[i][feature]   
-    #c_cdf = {key:val for (key,val) in CTG_features.fillna(np.random.choice(c_ctg[key]))}
-    
+    for feature in ['LB', 'AC', 'FM', 'UC', 'DL', 'DS', 'DR', 'DP', 'ASTV', 'MSTV', 'ALTV', 'MLTV', 'Width', 'Min', 'Max', 'Nmax', 'Nzeros', 'Mode', 'Mean', 'Median', 'Variance', 'Tendency']:
+        for i in range(1,len(CTG_features[feature])+1):
+
+            if np.isnan(CTG_features.at[i,feature]):
+                CTG_features.at[i , feature] = np.random.choice(c_ctg[feature])
     for feature in CTG_features.columns:
-        for i in range(len(CTG_features[feature])):
-            c_cdf[feature][i] = CTG_features[feature][i].replace(np.nan,np.random.choice(c_ctg[feature]))
-            
-        #for i in len(CTG_features[feature]):
-        #    if np.isnan(i):
-        #        CTG_features.replace(i,np.random.choice(c_ctg[feature]))
-        #c_cdf[feature] = CTG_features[feature] 
-           
-    
+        c_cdf[feature] = CTG_features[feature]
+    del c_cdf[extra_feature]
     # -------------------------------------------------------------------------
     return pd.DataFrame(c_cdf)
 
@@ -67,6 +59,7 @@ def sum_stat(c_feat):
     :return: Summary statistics as a dicionary of dictionaries (called d_summary) as explained in the notebook
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
+
 
     # -------------------------------------------------------------------------
     return d_summary
