@@ -21,8 +21,8 @@ def rm_ext_and_nan(CTG_features, extra_feature):
     #CTG_features.drop(columns=extra_feature,inplace=True)
     CTG_features = CTG_features.apply(pd.to_numeric,errors='coerce')
     c_ctg={}
-    for feature in CTG_features.columns:
-        c_ctg[feature] = CTG_features[feature].dropna()
+    for feature in  CTG_features.columns:
+        c_ctg[feature]= CTG_features[feature].dropna()
     # --------------------------------------------------------------------------
     
     return(c_ctg)
@@ -37,18 +37,21 @@ def nan2num_samp(CTG_features, extra_feature):
     """
     c_cdf = {}
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
+    #del CTG_features[extra_feature]
     c_ctg=rm_ext_and_nan(CTG_features, extra_feature)
     CTG_features = CTG_features.apply(pd.to_numeric,errors='coerce')
     cols=['LB', 'AC', 'FM', 'UC', 'DL', 'DS', 'DR', 'DP', 'ASTV', 'MSTV', 'ALTV', 'MLTV',
  'Width', 'Min', 'Max', 'Nmax', 'Nzeros', 'Mode', 'Mean', 'Median', 'Variance', 'Tendency']
     for feature in cols:
-        for i in range(1,len(CTG_features[feature])+1):
-            if np.isnan(CTG_features.at[i,feature]):
-                CTG_features.at[i,feature]=np.random.choice(c_ctg[feature])
-    for feature in CTG_features.columns:
-        c_cdf[feature]=CTG_features[feature]
-    del c_cdf[extra_feature]
-
+        for i in range(len(CTG_features[feature])):
+            if [feature][i]==np.nan:
+                x=np.random.choice(c_ctg[feature])
+                c_cdf[feature][i].replace(np.nan,x)
+            #if CTG_features[feature][i]== np.isnan():
+            #c_cdf[i]=CTG_features[i].fillna(np.random.choice(c_ctg[feature]))
+    #for feature in CTG_features.columns:
+        #x=np.random.choice(c_ctg[feature])
+        #c_cdf[feature]=CTG_features[feature].fillna(x)
     # -------------------------------------------------------------------------
     return pd.DataFrame(c_cdf)
 
@@ -60,9 +63,6 @@ def sum_stat(c_feat):
     :return: Summary statistics as a dicionary of dictionaries (called d_summary) as explained in the notebook
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
-    d_summary={}
-    for feature in c_feat.columns:
-        d_summary[feature]={'min':c_feat[feature].min(),'Q1':c_feat[feature].quantile(0.25),'median':c_feat[feature].quantile(0.5),'Q3':c_feat[feature].quantile(0.75),'max':c_feat[feature].max()}
 
     # -------------------------------------------------------------------------
     return d_summary
@@ -77,15 +77,6 @@ def rm_outlier(c_feat, d_summary):
     """
     c_no_outlier = {}
     # ------------------ IMPLEMENT YOUR CODE HERE:------------------------------
-    c_feat_copy = c_feat.copy()
-    for feature in c_feat_copy.columns:
-        outlier_big=d_summary[feature]['Q3']+(1.5*(d_summary[feature]['Q3']-d_summary[feature]['Q1']))
-        outlier_small=d_summary[feature]['Q1']-(1.5*(d_summary[feature]['Q3']-d_summary[feature]['Q1']))
-        for i in range(1, len(c_feat_copy[feature]) + 1):
-            if (c_feat_copy.at[i,feature] > outlier_big) or (c_feat_copy.at[i,feature] < outlier_small):
-                c_feat_copy.at[i,feature]=np.nan
-    for feature in c_feat_copy.columns:
-        c_no_outlier[feature] = c_feat_copy[feature]
 
     # -------------------------------------------------------------------------
     return pd.DataFrame(c_no_outlier)
