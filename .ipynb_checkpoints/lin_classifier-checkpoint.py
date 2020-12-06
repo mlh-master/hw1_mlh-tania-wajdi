@@ -19,7 +19,12 @@ def pred_log(logreg, X_train, y_train, X_test, flag=False):
     :return: A two elements tuple containing the predictions and the weightning matrix
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
-
+    logreg.fit(X_train,y_train)
+    w_log = logreg.coef_
+    if flag == False:
+        y_pred_log = logreg.predict(X_test)
+    #else:                                            
+        #y_pred_log = logreg.predict_proba(X_test)
     # -------------------------------------------------------------------------
     return y_pred_log, w_log
 
@@ -35,7 +40,7 @@ def w_no_p_table(w, features):
     fig.tight_layout()
     plt.show()
 
-
+    
 def w_all_tbl(w2, w1, orig_feat):
     idx_l2 = np.argsort(-w2, axis=1)
     w2_sort = -np.sort(-w2, axis=1)
@@ -64,9 +69,9 @@ def w_all_tbl(w2, w1, orig_feat):
 
 def cv_kfold(X, y, C, penalty, K, mode):
     """
-    
+
     :param X: Training set samples
-    :param y: Training set labels 
+    :param y: Training set labels
     :param C: A list of regularization parameters
     :param penalty: A list of types of norm
     :param K: Number of folds
@@ -83,7 +88,7 @@ def cv_kfold(X, y, C, penalty, K, mode):
             for train_idx, val_idx in kf.split(X, y):
                 x_train, x_val = X.iloc[train_idx], X.iloc[val_idx]
         # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
-
+    
         # --------------------------------------------------------------------------
     return validation_dict
 
@@ -98,7 +103,7 @@ def odds_ratio(w, X, selected_feat='LB'):
              odds_ratio: the odds ratio of the selected feature and label
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
-
+    
     # --------------------------------------------------------------------------
 
     return odds, odd_ratio

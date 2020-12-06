@@ -131,7 +131,23 @@ def norm_standard(CTG_features, selected_feat=('LB', 'ASTV'), mode='none', flag=
             nsd_res[feature]=(CTG_features[feature]-mean_feat)/(max_feat-min_feat)
         else:
             nsd_res[feature]=CTG_features[feature]
-        
+    if flag == True:
+        h1 = nsd_res[x].hist(bins=40)
+        h1.set_xlabel(f"mode = {mode}")
+        h1.set_ylabel ("count")
+        h1.set_title(f"{x}")
+        plt.show()
+
+        h2 = nsd_res[y].hist(bins=40)
+        h2.set_xlabel(f"mode = {mode}")
+        h2.set_ylabel("count")
+        h2.set_title(f"{y}")
+        plt.show()
+
+
+
+
+
 
     # -------------------------------------------------------------------------
     return pd.DataFrame(nsd_res)

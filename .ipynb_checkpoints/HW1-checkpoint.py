@@ -378,34 +378,34 @@ print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pr
 
 selected_feat = 'LB'
 
-odds, ratio = odds_ratio(w, X_test, selected_feat=selected_feat)  # you have to fill the right X first
-
-print(f'The odds ratio of {selected_feat} for Normal is {ratio}')
-print(f"The odds to be labeled as 'Normal' is {odds}")
-
-
-# ### Question:
-# **Q6:** What is the meaning of your results? Explain the difference between odds_ratio and odds.
+# odds, ratio = odds_ratio(w, X_, selected_feat=selected_feat)  # you have to fill the right X first
 #
-# ### Answers:
-# **Q6:**
+# print(f'The odds ratio of {selected_feat} for Normal is {ratio}')
+# print(f"The odds to be labeled as 'Normal' is {odds}")
 #
-# Now let's see if normalization and standardization help us. Fill the next cell and print the three accuracies of the standardized and normalized training and testing data. *Important notes*:
 #
-# * Avoid information leakage! (from the test set to the train set)
-# * Do not apply the `norm_standard (nsd)` function on the labels.
-# * Set the `flag` argument to `False` when using `nsd` function.
-
-# In[ ]:
-
-
-# Implement your code here:
-mode = # choose a mode from the `nsd`
+# # ### Question:
+# # **Q6:** What is the meaning of your results? Explain the difference between odds_ratio and odds.
+#
+# # ### Answers:
+# # **Q6:**
+#
+# # Now let's see if normalization and standardization help us. Fill the next cell and print the three accuracies of the standardized and normalized training and testing data. *Important notes*:
+# #
+# # * Avoid information leakage! (from the test set to the train set)
+# # * Do not apply the `norm_standard (nsd)` function on the labels.
+# # * Set the `flag` argument to `False` when using `nsd` function.
+#
+# # In[ ]:
+#
+#
+# # Implement your code here:
+# mode = # choose a mode from the `nsd`
 # y_pred, w_norm_std = pred_log(logreg,) # complete this function using nsd function
-print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
-print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
-
-
+# print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
+# print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
+#
+#
 # # You can choose now one of the training-testing dataset and stick to it. Let's visualize our learned parameters. Use your chosen weight matrix as an input to the function `w_no_p_table` in the next cell.
 #
 # # In[ ]:
