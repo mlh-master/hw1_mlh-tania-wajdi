@@ -378,7 +378,7 @@ print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pr
 
 selected_feat = 'LB'
 
-odds, ratio = odds_ratio(w, X_test, selected_feat=selected_feat)  # you have to fill the right X first
+odds, ratio = odds_ratio(w, X_train, selected_feat=selected_feat)  # you have to fill the right X first
 
 print(f'The odds ratio of {selected_feat} for Normal is {ratio}')
 print(f"The odds to be labeled as 'Normal' is {odds}")
@@ -400,70 +400,70 @@ print(f"The odds to be labeled as 'Normal' is {odds}")
 
 
 # Implement your code here:
-mode = # choose a mode from the `nsd`
-# y_pred, w_norm_std = pred_log(logreg,) # complete this function using nsd function
+mode = 'MinMax'
+y_pred, w_norm_std = pred_log(logreg,nsd(X_train,mode=mode,flag=False),y_train,nsd(X_test,mode=mode,flag=False),flag=False) # complete this function using nsd function
 print("Accuracy is: " + str("{0:.2f}".format(100 * metrics.accuracy_score(y_test, y_pred))) + "%")
 print("F1 score is: " + str("{0:.2f}".format(100 * metrics.f1_score(y_test, y_pred, average='macro'))) + "%")
 
 
-# # You can choose now one of the training-testing dataset and stick to it. Let's visualize our learned parameters. Use your chosen weight matrix as an input to the function `w_no_p_table` in the next cell.
-#
-# # In[ ]:
-#
-#
-# input_mat =  # Fill this argument
-# w_no_p_table(input_mat,orig_feat)
-#
-#
-# # ### Questions:
-# # **Q7:** Mention one advantage of using cross entropy as the cost function.
-# #
-# #
-# # **Q8:** By selecting one feature at a time and compare their learned weights by looking at plots we had, what can you tell about the weights relations? Why does it happen? **Hint:** notice the sign of the weights and remember that an exponent is a monotonic function.
-#
-# # ### Answers:
-# # **Q7:**
-# #
-# # **Q8:**
-#
-# # Ok, now let's recall that in the lecture you saw that accuracy is not always our best measure. Sensitivity and specificity can be much more informative and important mostly. The choice to train a model to have better results in sensitivity aspect rather than specificity or vice versa depends on our application.
-#
-# # In[ ]:
+# You can choose now one of the training-testing dataset and stick to it. Let's visualize our learned parameters. Use your chosen weight matrix as an input to the function `w_no_p_table` in the next cell.
+
+# In[ ]:
+
+
+input_mat = w_norm_std # Fill this argument
+w_no_p_table(input_mat,orig_feat)
+
+
+# ### Questions:
+# **Q7:** Mention one advantage of using cross entropy as the cost function.
 #
 #
-# cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
-# ax = plt.subplot()
-# sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
-# ax.set(ylabel='True labels', xlabel='Predicted labels')
-# plt.show()
+# **Q8:** By selecting one feature at a time and compare their learned weights by looking at plots we had, what can you tell about the weights relations? Why does it happen? **Hint:** notice the sign of the weights and remember that an exponent is a monotonic function.
+
+# ### Answers:
+# **Q7:**
 #
+# **Q8:**
+
+# Ok, now let's recall that in the lecture you saw that accuracy is not always our best measure. Sensitivity and specificity can be much more informative and important mostly. The choice to train a model to have better results in sensitivity aspect rather than specificity or vice versa depends on our application.
+
+# In[ ]:
+
+
+cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
+ax = plt.subplot()
+sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
+ax.set(ylabel='True labels', xlabel='Predicted labels')
+plt.show()
+
+
+# ### Questions:
+# **Q9:** What do you think is more important to us with this data? What is the clinical risk/cost for False Positive (FP) and False Negative (FN)?
+
+# ### Answers:
+# **Q9:**
+
+# So, now we will try to handle one of the main issues in learning which is called **overfitting** and one way to deal with it is called **regularization**.
 #
-# # ### Questions:
-# # **Q9:** What do you think is more important to us with this data? What is the clinical risk/cost for False Positive (FP) and False Negative (FN)?
+# There are several types of regularizations and in this assignment we will experience two of them:
 #
-# # ### Answers:
-# # **Q9:**
+# 1) Loss regularization.
 #
-# # So, now we will try to handle one of the main issues in learning which is called **overfitting** and one way to deal with it is called **regularization**.
-# #
-# # There are several types of regularizations and in this assignment we will experience two of them:
-# #
-# # 1) Loss regularization.
-# #
-# # 2) Validation.
-# #
-# # The loss function is a function that takes the predicted values and the labels and *measures* how "close" they are to each other. Our demand is that this "distance" (metric) would be as low as possible. In addition to it, we can add more "demands" that can be represented mathematically. For example, we can demand that the number of coefficients won't get to large or we can try to restrict their values. A more physical example is a demand that our signal has to be smooth. When we try to minimize the new loss function we actually try to find the result which is the compromise of our demands. We can also "favor" one demand over another using **regularization parameters**.
-# #
-# # You saw in the lecture "demands" on the learned weights and represented those demands mathematically using $ L_1 $ and $ L_2 $ norms. The regularization parameter was denoted as $\lambda$ (please notice that sometimes it is common to use the notation of $ c $ where $\lambda = c^{-1}$). Now it's your turn to become artists! Change and/or add arguments to *LogisticRegression* class in the next cell and perform learning using two regularizations: $ L_1 $ and $ L_2 $. Examine your results using the confusion matrix as we did before. Tune your regularization parameter until you get a result that you think is reasonable and that brings the sensitivity/specificity (depending on what you chose before) to the maximum.
+# 2) Validation.
 #
-# # In[ ]:
+# The loss function is a function that takes the predicted values and the labels and *measures* how "close" they are to each other. Our demand is that this "distance" (metric) would be as low as possible. In addition to it, we can add more "demands" that can be represented mathematically. For example, we can demand that the number of coefficients won't get to large or we can try to restrict their values. A more physical example is a demand that our signal has to be smooth. When we try to minimize the new loss function we actually try to find the result which is the compromise of our demands. We can also "favor" one demand over another using **regularization parameters**.
 #
-#
+# You saw in the lecture "demands" on the learned weights and represented those demands mathematically using $ L_1 $ and $ L_2 $ norms. The regularization parameter was denoted as $\lambda$ (please notice that sometimes it is common to use the notation of $ c $ where $\lambda = c^{-1}$). Now it's your turn to become artists! Change and/or add arguments to *LogisticRegression* class in the next cell and perform learning using two regularizations: $ L_1 $ and $ L_2 $. Examine your results using the confusion matrix as we did before. Tune your regularization parameter until you get a result that you think is reasonable and that brings the sensitivity/specificity (depending on what you chose before) to the maximum.
+
+# In[ ]:
+
+
 # # Implement your code here:
 # mode = # choose a mode from the `nsd`
-# logreg_l2 = LogisticRegression(solver='saga', multi_class='ovr', max_iter=10000) # complete the arguments for L2
+#  logreg_l2 = LogisticRegression(solver='saga', multi_class='ovr', max_iter=10000) # complete the arguments for L2
 # y_pred_2, w2 = pred_log(logreg_l2,) # complete this function using nsd function
-# cnf_matrix = metrics.confusion_matrix(y_test, y_pred_2)
+cnf_matrix = metrics.confusion_matrix(y_test, y_pred_2)
 # ax1 = plt.subplot(211)
 # sns.heatmap(cnf_matrix, annot=True, xticklabels=['Normal','Suspect','Pathology'], yticklabels=['Normal','Suspect','Pathology'])
 # ax1.set(ylabel='True labels', xlabel='Predicted labels')

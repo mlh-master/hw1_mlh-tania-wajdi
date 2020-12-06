@@ -88,7 +88,7 @@ def cv_kfold(X, y, C, penalty, K, mode):
             for train_idx, val_idx in kf.split(X, y):
                 x_train, x_val = X.iloc[train_idx], X.iloc[val_idx]
         # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
-    
+
         # --------------------------------------------------------------------------
     return validation_dict
 
@@ -103,7 +103,14 @@ def odds_ratio(w, X, selected_feat='LB'):
              odds_ratio: the odds ratio of the selected feature and label
     """
     # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
-    
+    w_t_normal = np.transpose(w[0])
+    log_median_odds = np.median(X @ w_t_normal)
+    odds = np.exp(log_median_odds)
+    X_plus1 = X.copy()
+    X_plus1[selected_feat] = X[selected_feat]+1
+    log_median_odds_plus1 = np.median(X_plus1 @ w_t_normal)
+    odds_plus1 = np.exp(log_median_odds_plus1)
+    odd_ratio = odds_plus1/odds
     # --------------------------------------------------------------------------
 
     return odds, odd_ratio
