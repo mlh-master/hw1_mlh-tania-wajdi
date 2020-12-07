@@ -23,8 +23,8 @@ def pred_log(logreg, X_train, y_train, X_test, flag=False):
     w_log = logreg.coef_
     if flag == False:
         y_pred_log = logreg.predict(X_test)
-    #else:                                            
-        #y_pred_log = logreg.predict_proba(X_test)
+    else:
+        y_pred_log = logreg.predict_proba(X_test)
     # -------------------------------------------------------------------------
     return y_pred_log, w_log
 
@@ -88,7 +88,11 @@ def cv_kfold(X, y, C, penalty, K, mode):
             for train_idx, val_idx in kf.split(X, y):
                 x_train, x_val = X.iloc[train_idx], X.iloc[val_idx]
         # ------------------ IMPLEMENT YOUR CODE HERE:-----------------------------
-
+                y_train, y_val = y[train_idx], y[val_idx]
+                y_pred_proba, w = pred_log(logreg,nsd(x_train,mode=mode,flag=False),y_train,nsd(x_val,mode=mode,flag=False),flag=True)
+                loss_val_vec[k] = log_loss(y_val, y_pred_proba)
+                k+=1
+            validation_dict+= [{'C':c, 'penalty':p, 'mu':np.mean(loss_val_vec), 'sigma':np.std(loss_val_vec)}]
         # --------------------------------------------------------------------------
     return validation_dict
 
