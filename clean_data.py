@@ -143,11 +143,5 @@ def norm_standard(CTG_features, selected_feat=('LB', 'ASTV'), mode='none', flag=
         h2.set_ylabel("count")
         h2.set_title(f"{y}")
         plt.show()
-
-
-
-
-
-
     # -------------------------------------------------------------------------
     return pd.DataFrame(nsd_res)
